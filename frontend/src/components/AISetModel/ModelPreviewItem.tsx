@@ -36,7 +36,8 @@ export function ModelPreviewItem({id, provider, modelName, isFocus, onSelectMode
                 duration-300 
                 ease-in-out
                 border-x border-1 border-[#e0e0e0]
-                ${isFocus ? "bg-[#c1fdfe]" : "bg-white"}
+                text-[#c1fdfe]
+                ${isFocus ? "bg-[#111f2c]" : "bg-[#384655]"}
             `}
             onClick={onClickItem}
         >

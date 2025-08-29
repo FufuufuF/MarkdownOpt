@@ -5,6 +5,12 @@ export class EventTypes {
     static MODEL_UPDATED = "model_updated";
 }
 
+export class EditorEventTypes {
+    static STYLE_UPDATE = "style_update";
+    static MARKDOWN_UPDATE = "markdown_update";
+    static AI_SET_MODEL_SHOW_UPDATE = "ai_set_model_show_update";
+}
+
 export type EventListener<T> = (data: T) => void;
 
 export class EventEmitter<T = unknown> {

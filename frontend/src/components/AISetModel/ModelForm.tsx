@@ -238,10 +238,16 @@ export function ModelForm({
                 </button>
                 <button
                     type="submit"
-                    className={`${buttonClassName} text-white bg-[#316c6d] hover:bg-[#609b9b]`}
+                    className={`${buttonClassName} text-white bg-[#609b9b] hover:bg-[#406b6c]`}
                     onClick={() => handleSaveModel()}
                 >
                     保存
+                </button>
+                                <button
+                    type="button"
+                    className={`${buttonClassName} text-[#e0e0e0] bg-[#212e3c] hover:bg-[#111f2c]`}
+                >
+                    应用
                 </button>
             </div>
         </div>

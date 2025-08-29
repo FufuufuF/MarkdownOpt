@@ -1,12 +1,27 @@
 import MarkdownEditor from "./pages/MarkdownEditor";
 import { AISetModel } from "./components/AISetModel";
 import { useCallback, useState } from "react";
+import { appVM } from "./services/AppVM";
+import { useEventListener } from "./hooks/useEventListener";
+import { EditorEventTypes } from "./utils/EventEmitter";
 
 function App() {
 
-    const [style, setStyle] = useState<string>("");
-    const [markdown, setMarkdown] = useState<string>("");
-    const [isAISetModelOpen, setIsAISetModelOpen] = useState<boolean>(false);
+    const [style, setStyle] = useState<string>(appVM.getStyle());
+    const [markdown, setMarkdown] = useState<string>(appVM.getMarkdown());
+    const [isAISetModelOpen, setIsAISetModelOpen] = useState<boolean>(appVM.getIsAISetModelShow());
+
+    useEventListener(EditorEventTypes.STYLE_UPDATE, (style: string) => {
+        setStyle(style);
+    });
+
+    useEventListener(EditorEventTypes.MARKDOWN_UPDATE, (markdown: string) => {
+        setMarkdown(markdown);
+    });
+
+    useEventListener(EditorEventTypes.AI_SET_MODEL_SHOW_UPDATE, (isShow: boolean) => {
+        setIsAISetModelOpen(isShow);
+    });
 
     const handleOptimize = useCallback(async () => {
         if (!markdown.trim() || !style) {
@@ -20,14 +35,26 @@ function App() {
         }
     }, [markdown, style]);
 
+    const handleStyleChange = (style: string) => {
+        appVM.setStyle(style);
+    }
+
+    const handleMarkdownChange = (markdown: string) => {
+        appVM.setMarkdown(markdown);
+    }
+
+    const handleIsAISetModelOpenChange = (isOpen: boolean) => {
+        appVM.setIsAISetModelShow(isOpen);
+    }
+
     return (
         <>
             <MarkdownEditor
-                setStyle={setStyle}
+                setStyle={handleStyleChange}
                 markdown={markdown}
-                setMarkdown={setMarkdown}
+                setMarkdown={handleMarkdownChange}
                 isAISetModelOpen={isAISetModelOpen}
-                setIsAISetModelOpen={setIsAISetModelOpen}
+                setIsAISetModelOpen={handleIsAISetModelOpenChange}
                 handleOptimize={handleOptimize}
             />
             {
