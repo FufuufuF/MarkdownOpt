@@ -18,9 +18,14 @@ export default function MarkdownRender({markdown}: MarkdownRenderProps) {
             text-[#ffffff]
             overflow-auto
             p-4
+            w-full
         "
         >
-            <article className="prose dark:prose-invert">
+            <article className="
+                prose 
+                dark:prose-invert
+                break-words
+            ">
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{

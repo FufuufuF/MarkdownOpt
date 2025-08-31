@@ -28,9 +28,12 @@ export default function MarkdownEditor({
             <div
                 className="
                     input-area
-                    flex-1/2
+                    w-1/2
+                    flex-shrink-0
+                    flex-grow-0
                     flex
                     flex-col
+                    overflow-hidden
                 ">
                     <ToolBar
                         setStyle={setStyle}
@@ -39,7 +42,7 @@ export default function MarkdownEditor({
                         handleOptimize={handleOptimize}
                     />
                 
-                    <div className="input-wrapper flex-1">
+                    <div className="input-wrapper flex-1 overflow-hidden">
                         <MarkdownInput
                             markdown={markdown}
                             setMarkdown={setMarkdown}
@@ -47,7 +50,14 @@ export default function MarkdownEditor({
                     </div>
             </div>
 
-            <div className="flex-1/2 h-screen">
+            <div className="
+                render-wrapper 
+                w-1/2 
+                flex-shrink-0 
+                flex-grow-0 
+                h-screen 
+                overflow-hidden
+            ">
                 <MarkdownRender markdown={markdown}/>
             </div>
         </div>

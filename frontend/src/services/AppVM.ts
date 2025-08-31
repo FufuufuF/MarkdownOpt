@@ -109,13 +109,16 @@ export class AppVM{
 
         try {
             this.startOptimizing();
-            this.setMarkdown("");
+
+            const markdownSnapshot = this.markdown;
 
             const request: OptimizeRequest = {
-                markdown: this.markdown,
+                markdown: markdownSnapshot,
                 style: this.style,
                 aiModelConfig: this.currentAppliedModel
             }
+
+            this.setMarkdown("");
 
             await AIService.optimizeWithStreamMock(
                 request,
