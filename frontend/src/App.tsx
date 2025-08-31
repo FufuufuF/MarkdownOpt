@@ -9,14 +9,9 @@ import { converModelInfoToAIModelConfig } from "./models/AIModels";
 
 function App() {
 
-    const [style, setStyle] = useState<string>(appVM.getStyle());
     const [markdown, setMarkdown] = useState<string>(appVM.getMarkdown());
     const [isAISetModelOpen, setIsAISetModelOpen] = useState<boolean>(appVM.getIsAISetModelShow());
     const [isOptimizing, setIsOptimizing] = useState<boolean>(false);
-
-    useEventListener(EditorEventTypes.STYLE_UPDATE, (style: string) => {
-        setStyle(style);
-    });
 
     useEventListener(EditorEventTypes.MARKDOWN_UPDATE, (markdown: string) => {
         setMarkdown(markdown);
@@ -59,17 +54,21 @@ function App() {
         await appVM.optimizeMarkdown();
     }, []);
 
-    const handleStyleChange = (style: string) => {
+    const handleStyleChange = useCallback((style: string) => {
         appVM.setStyle(style);
-    }
+    }, []);
 
-    const handleMarkdownChange = (markdown: string) => {
+    const handleMarkdownChange = useCallback((markdown: string) => {
         appVM.setMarkdown(markdown);
-    }
+    }, []);
 
-    const handleIsAISetModelOpenChange = (isOpen: boolean) => {
+    const handleIsAISetModelOpenChange = useCallback((isOpen: boolean) => {
         appVM.setIsAISetModelShow(isOpen);
-    }
+    }, []);
+
+    const handleAISetModelClose = useCallback(() => {
+        setIsAISetModelOpen(false);
+    }, []);
 
     return (
         <>
@@ -98,7 +97,7 @@ function App() {
                         z-50
                     "
                     >
-                        <AISetModel onClickClose={() => setIsAISetModelOpen(false)} />
+                        <AISetModel onClickClose={handleAISetModelClose} />
                     </div>
                     :
                     null
