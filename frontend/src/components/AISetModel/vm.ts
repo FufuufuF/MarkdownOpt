@@ -4,7 +4,7 @@ import { eventEmitter, AIModelEventTypes } from "../../utils/EventEmitter";
 
 export class AISetModelVM {
     private models = new Map<string, ModelInfo>();
-    private currentModelId: string | null = null;
+    private currentShownId: string | null = null;
     private currentAppliedModelId: string | null = null;
 
     private static EMPTY_ARRAY = Object.freeze<ModelInfo[]>([]);
@@ -31,7 +31,7 @@ export class AISetModelVM {
                 // 设置当前选中的模型为最新更新的模型
                 const savedModelsArray = this.getAllModels();
                 if (savedModelsArray && savedModelsArray.length > 0) {
-                    this.currentModelId = savedModelsArray[0].id;
+                    this.currentShownId = savedModelsArray[0].id;
                 }
 
                 // 设置当前应用的模型ID
@@ -67,7 +67,7 @@ export class AISetModelVM {
             timestamp: Date.now(),
         };
         this.models.set(newModel.id, newModel); // 添加到模型集合中
-        this.currentModelId = newModel.id; // 设置为当前模型
+        this.currentShownId = newModel.id; // 设置为当前模型
         eventEmitter.emit(AIModelEventTypes.MODEL_CREATED, newModel);
         return newModel;
     };
@@ -84,9 +84,9 @@ export class AISetModelVM {
     };
 
     // 获取当前显示的模型
-    getCurrentModel = (): ModelInfo => {
-        if (this.currentModelId && this.models.has(this.currentModelId)) {
-            return this.models.get(this.currentModelId)!;
+    getCurrentShownModel = (): ModelInfo => {
+        if (this.currentShownId && this.models.has(this.currentShownId)) {
+            return this.models.get(this.currentShownId)!;
         }
         // 返回默认模型
         return this.createModel();
@@ -105,9 +105,9 @@ export class AISetModelVM {
         this.saveToStorage();
         const remainingModels = this.getAllModels();
         if (remainingModels && remainingModels.length > 0) {
-            this.setCurrentModel(remainingModels[0].id);
+            this.setCurrentShownModel(remainingModels[0].id);
         } else {
-            this.currentModelId = null;
+            this.currentShownId = null;
             eventEmitter.emit(AIModelEventTypes.MODEL_SELECTED, this.createModel());
         }
 
@@ -115,9 +115,9 @@ export class AISetModelVM {
     };
 
     // 设置当前模型
-    setCurrentModel = (id: string) => {
-        this.currentModelId = id;
-        eventEmitter.emit(AIModelEventTypes.MODEL_SELECTED, this.getCurrentModel());
+    setCurrentShownModel = (id: string) => {
+        this.currentShownId = id;
+        eventEmitter.emit(AIModelEventTypes.MODEL_SELECTED, this.getCurrentShownModel());
     };
 
     setCurrentAppliedModel = (id: string) => {

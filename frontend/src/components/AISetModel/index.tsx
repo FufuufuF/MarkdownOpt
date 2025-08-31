@@ -14,28 +14,28 @@ export interface AISetModelProps {
 export function AISetModel({ onClickClose }: AISetModelProps) {
 
     const [modelList, setModelList] = useState<ModelInfo[] | readonly ModelInfo[]>(vm.getAllModels());
-    const [currentModel, setCurrentModel] = useState<ModelInfo>(vm.getCurrentModel());
+    const [currentShownModel, setCurrentShownModel] = useState<ModelInfo>(vm.getCurrentShownModel());
     const [currentAppliedModelId, setCurrentAppliedModelId] = useState<string | null>(vm.getCurrentAppliedModelId());
 
     useEffect(() => {
         console.log("[最新模型列表]", modelList);
-        console.log("当前展示模型: ", currentModel)
-    }, [modelList, currentModel]);
+        console.log("当前展示模型: ", currentShownModel)
+    }, [modelList, currentShownModel]);
 
     useEventListener(AIModelEventTypes.MODEL_CREATED, (model: ModelInfo) => {
-        setCurrentModel(model);
+        setCurrentShownModel(model);
         setModelList((prev) => [...prev, model]);
     });
 
     useEventListener(AIModelEventTypes.MODEL_UPDATED, (model: ModelInfo) => {
-        setCurrentModel(model);
+        setCurrentShownModel(model);
         const nowModelList = [model, ...modelList.filter(m => m.id !== model.id)];
         setModelList(nowModelList);
     })
 
     useEventListener(AIModelEventTypes.MODEL_DELETED, (id: string) => {
         setModelList((prev) => prev.filter(m => m.id !== id));
-        setCurrentModel(vm.getCurrentModel());
+        setCurrentShownModel(vm.getCurrentShownModel());
     });
 
     useEventListener(AIModelEventTypes.MODEL_APPLIED, (id: string) => {
@@ -52,20 +52,20 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
 
     const onSelectModel = (id: string) => {
         if (
-            currentModel.provider === "null" &&
-            currentModel.modelName == "新建模型" &&
-            currentModel.apiKey === "" &&
-            currentModel.maxTokens === 2000 &&
-            currentModel.temperature === 0.7 &&
-            currentModel.baseUrl === "" &&
-            currentModel.prompt === ""
+            currentShownModel.provider === "null" &&
+            currentShownModel.modelName == "新建模型" &&
+            currentShownModel.apiKey === "" &&
+            currentShownModel.maxTokens === 2000 &&
+            currentShownModel.temperature === 0.7 &&
+            currentShownModel.baseUrl === "" &&
+            currentShownModel.prompt === ""
         ) {
-            vm.deleteModel(currentModel.id);
+            vm.deleteModel(currentShownModel.id);
         }
 
         const model = modelList.find(m => m.id === id);
         if (model) {
-            setCurrentModel(model);
+            setCurrentShownModel(model);
         }
     }
 
@@ -85,7 +85,7 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
 
         const newModel = vm.createModel();
         setModelList([newModel, ...modelList]);
-        setCurrentModel(newModel);
+        setCurrentShownModel(newModel);
     };
 
     const onDeleteModel = (id: string) => {
@@ -197,7 +197,7 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
                         modelPreviewItems={modelPreviewItems}
                         onCreateModel={onCreateModel}
                         onSelectModel={onSelectModel}
-                        focusedModelId={currentModel.id}
+                        focusedModelId={currentShownModel.id}
                         appliedModelId={currentAppliedModelId}
                     />
                 </div>
@@ -208,15 +208,15 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
                     h-full
                 ">
                     <ModelForm
-                        id={currentModel.id}
-                        provider={currentModel.provider}
-                        modelName={currentModel.modelName}
-                        apiKey={currentModel.apiKey}
-                        maxTokens={currentModel.maxTokens}
-                        temperature={currentModel.temperature}
-                        baseUrl={currentModel.baseUrl}
-                        prompt={currentModel.prompt}
-                        isApplied={currentAppliedModelId === currentModel.id}
+                        id={currentShownModel.id}
+                        provider={currentShownModel.provider}
+                        modelName={currentShownModel.modelName}
+                        apiKey={currentShownModel.apiKey}
+                        maxTokens={currentShownModel.maxTokens}
+                        temperature={currentShownModel.temperature}
+                        baseUrl={currentShownModel.baseUrl}
+                        prompt={currentShownModel.prompt}
+                        isApplied={currentAppliedModelId === currentShownModel.id}
                         onSaveModel={onSaveModel}
                         onDeleteModel={onDeleteModel}
                         onCancelEdit={onCancelEdit}
