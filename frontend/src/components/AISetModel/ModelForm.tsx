@@ -10,10 +10,12 @@ export interface ModelFormProps {
     temperature?: number;
     baseUrl?: string;
     prompt?: string;
+    isApplied: boolean;
 
     onSaveModel: (model: ModelInfo) => void;
     onDeleteModel: (id: string) => void;
     onCancelEdit: (id: string) => void;
+    onApplyModel?: (id: string) => void;
 }
 
 export function ModelForm({
@@ -25,9 +27,11 @@ export function ModelForm({
     temperature = 0.7,
     baseUrl = "",
     prompt = "",
+    isApplied,
     onSaveModel,
     onDeleteModel,
-    onCancelEdit
+    onCancelEdit,
+    onApplyModel
 }: ModelFormProps) {
 
     const [nowModelName, setModelName] = useState<string>(modelName);
@@ -46,7 +50,7 @@ export function ModelForm({
         setTemperature(temperature);
         setBaseUrl(baseUrl);
         setPrompt(prompt);
-    },[modelName, provider, apiKey, maxTokens, temperature, baseUrl, prompt])
+    }, [modelName, provider, apiKey, maxTokens, temperature, baseUrl, prompt])
 
     const handleCancel = () => {
         setModelName(modelName);
@@ -75,7 +79,7 @@ export function ModelForm({
             temperature: nowTemperature,
             baseUrl: nowBaseUrl,
             prompt: nowPrompt,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         })
     }
     const formItemWrapperClassName: string = `
@@ -243,9 +247,19 @@ export function ModelForm({
                 >
                     保存
                 </button>
-                                <button
+                <button
                     type="button"
-                    className={`${buttonClassName} text-[#e0e0e0] bg-[#212e3c] hover:bg-[#111f2c]`}
+                    className={`
+                                ${buttonClassName} 
+                                text-[#e0e0e0] 
+                                bg-[#212e3c] 
+                                hover:bg-[#111f2c]
+                                ${isApplied ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                            `}
+                    onClick={() => {
+                        console.log("[在ModelForm中: 模型应用更新]");
+                        onApplyModel(id);
+                    }}
                 >
                     应用
                 </button>

@@ -3,11 +3,12 @@ import { ModelPreviewItem, type ModelPreviewItemProps } from "./ModelPreviewItem
 export interface ModelListProps {
     modelPreviewItems: ModelPreviewItemProps[] | null;
     focusedModelId: string;
+    appliedModelId: string | null;
     onCreateModel: () => void;
     onSelectModel: (id: string) => void;
 }
 
-export function ModelList({modelPreviewItems, focusedModelId, onCreateModel, onSelectModel}: ModelListProps) {
+export function ModelList({modelPreviewItems, focusedModelId, appliedModelId, onCreateModel, onSelectModel}: ModelListProps) {
 
     return (
         <div 
@@ -36,6 +37,7 @@ export function ModelList({modelPreviewItems, focusedModelId, onCreateModel, onS
                             modelName={modelPreviewItem.modelName} 
                             onSelectModel={onSelectModel}
                             isFocus={modelPreviewItem.id === focusedModelId}
+                            isApplied={modelPreviewItem.id === appliedModelId}
                         />
                     );
                 }): null}

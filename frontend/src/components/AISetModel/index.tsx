@@ -5,7 +5,7 @@ import { ModelPreviewItemProps } from "./ModelPreviewItem";
 import { vm } from "./vm";
 import { ModelInfo } from "../../models/AIModelConfig";
 import { useEventListener } from "../../hooks/useEventListener";
-import { EventTypes } from "../../utils/EventEmitter";
+import { AIModelEventTypes } from "../../utils/EventEmitter";
 
 export interface AISetModelProps {
     onClickClose: () => void;
@@ -15,26 +15,35 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
 
     const [modelList, setModelList] = useState<ModelInfo[] | readonly ModelInfo[]>(vm.getAllModels());
     const [currentModel, setCurrentModel] = useState<ModelInfo>(vm.getCurrentModel());
+    const [currentAppliedModelId, setCurrentAppliedModelId] = useState<string | null>(vm.getCurrentAppliedModelId());
 
     useEffect(() => {
         console.log("[最新模型列表]", modelList);
         console.log("当前展示模型: ", currentModel)
     }, [modelList, currentModel]);
 
-    useEventListener(EventTypes.MODEL_CREATED, (model: ModelInfo) => {
+    useEventListener(AIModelEventTypes.MODEL_CREATED, (model: ModelInfo) => {
         setCurrentModel(model);
         setModelList((prev) => [...prev, model]);
     });
 
-    useEventListener(EventTypes.MODEL_UPDATED, (model: ModelInfo) => {
+    useEventListener(AIModelEventTypes.MODEL_UPDATED, (model: ModelInfo) => {
         setCurrentModel(model);
         const nowModelList = [model, ...modelList.filter(m => m.id !== model.id)];
         setModelList(nowModelList);
     })
 
-    useEventListener(EventTypes.MODEL_DELETED, (id: string) => {
+    useEventListener(AIModelEventTypes.MODEL_DELETED, (id: string) => {
         setModelList((prev) => prev.filter(m => m.id !== id));
         setCurrentModel(vm.getCurrentModel());
+    });
+
+    useEventListener(AIModelEventTypes.MODEL_APPLIED, (id: string) => {
+        console.log("[监听到模型应用更新]");
+        const model = vm.getAllModels().find(m => m.id === id);
+        if (model) {
+            setCurrentAppliedModelId(id);
+        }
     });
 
     const onSaveModel = (model: ModelInfo) => {
@@ -98,6 +107,12 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
             vm.deleteModel(id);
         }
     }
+
+    const onApplyModel = (id: string) => {
+        const model = modelList.find(m => m.id === id);
+        if (!model) return;
+        vm.setCurrentAppliedModel(id);
+    };
 
     // 将模型列表处理成预览数据
     const modelPreviewItems: ModelPreviewItemProps[] = (
@@ -183,6 +198,7 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
                         onCreateModel={onCreateModel}
                         onSelectModel={onSelectModel}
                         focusedModelId={currentModel.id}
+                        appliedModelId={currentAppliedModelId}
                     />
                 </div>
 
@@ -200,9 +216,11 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
                         temperature={currentModel.temperature}
                         baseUrl={currentModel.baseUrl}
                         prompt={currentModel.prompt}
+                        isApplied={currentAppliedModelId === currentModel.id}
                         onSaveModel={onSaveModel}
                         onDeleteModel={onDeleteModel}
                         onCancelEdit={onCancelEdit}
+                        onApplyModel={onApplyModel}
                     />
                 </div>
 

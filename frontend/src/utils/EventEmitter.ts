@@ -1,8 +1,9 @@
-export class EventTypes {
+export class AIModelEventTypes {
     static MODEL_CREATED = "model_created";
     static MODEL_SELECTED = "model_selected";
     static MODEL_DELETED = "model_deleted";
     static MODEL_UPDATED = "model_updated";
+    static MODEL_APPLIED = "model_applied";
 }
 
 export class EditorEventTypes {
