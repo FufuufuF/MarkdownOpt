@@ -80,6 +80,7 @@ function App() {
                 isAISetModelOpen={isAISetModelOpen}
                 setIsAISetModelOpen={handleIsAISetModelOpenChange}
                 handleOptimize={handleOptimize}
+                isOptimizing={isOptimizing}
             />
             {
                 isAISetModelOpen ?

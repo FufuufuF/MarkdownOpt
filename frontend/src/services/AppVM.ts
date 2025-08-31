@@ -2,7 +2,7 @@ import { vm } from "../components/AISetModel/vm";
 import { AIModelConfig, converModelInfoToAIModelConfig } from "../models/AIModels";
 import { OptimizeRequest } from "../models/OptimizeModels";
 import { EditorEventTypes, eventEmitter } from "../utils/EventEmitter";
-import { AIService } from "./aiService";
+import { AIService } from "./AIService";
 
 export class AppVM{
     private style: string;
@@ -17,6 +17,7 @@ export class AppVM{
         this.isAISetModelShow = false;
         this.currentAppliedModel = null;
 
+        this.isOptimizing = false;
         this.initCurrentAppliedModel();
     }
 
@@ -81,7 +82,7 @@ export class AppVM{
     }
 
     // 流式更新结束
-    endOptimize() {
+    endOptimizing() {
         this.isOptimizing = false;
         eventEmitter.emit(EditorEventTypes.MARKDOWN_STREAM_END, false);
         eventEmitter.emit(EditorEventTypes.MARKDOWN_UPDATE, this.markdown);
@@ -100,6 +101,7 @@ export class AppVM{
 
         if (!this.style) {
             console.log("请选择写作风格");
+            return;
         }
 
         if (!this.currentAppliedModel) {
@@ -126,7 +128,7 @@ export class AppVM{
                     this.appendToMarkdown(chunk);
                 },
                 () => {
-                    this.endOptimize();
+                    this.endOptimizing();
                     console.log("已完成");
                 },
                 (error: Error) => {

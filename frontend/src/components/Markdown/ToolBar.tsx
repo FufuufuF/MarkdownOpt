@@ -4,13 +4,15 @@ export interface ToolBarProps {
     isAISetModelOpen: boolean;
     setIsAISetModelOpen: (isAISetModelOpen: boolean) => void;
     handleOptimize: () => void;
+    isOptimizing: boolean;
 };
 
 export default function ToolBar({
     setStyle,
     isAISetModelOpen,
     setIsAISetModelOpen,
-    handleOptimize
+    handleOptimize,
+    isOptimizing
 }: ToolBarProps) {
 
     const handleSelectedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -69,19 +71,27 @@ export default function ToolBar({
                 </button>
             </div>
             <button
-                className="
+                className={`
                         ai-optimize
                         text-white
-                        bg-[#ec5b54]
                         p-2
                         rounded-2xl
                         text-center
                         h-8
                         flex
                         items-center
-                    "
+                        transition-all
+                        duration-300
+                        ${isOptimizing 
+                            ? 'bg-gray-500 cursor-not-allowed opacity-70' 
+                            : 'bg-[#ec5b54] hover:bg-[#d14a44] cursor-pointer'
+                        }
+                    `}
                 onClick={handleOptimize}
-            >一键优化</button>
+                disabled={isOptimizing}
+            >
+                {isOptimizing ? "优化中..." : "一键优化"}
+            </button>
         </div>
     )
 }

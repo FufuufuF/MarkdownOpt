@@ -25,6 +25,8 @@ export default function MarkdownRender({markdown}: MarkdownRenderProps) {
                 prose 
                 dark:prose-invert
                 break-words
+                max-w-full
+                w-full
             ">
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm]}

@@ -9,6 +9,7 @@ export interface MarkdownEditorProps {
     isAISetModelOpen: boolean;
     setIsAISetModelOpen: (isAISetModelOpen: boolean) => void;
     handleOptimize: () => void;
+    isOptimizing: boolean;
 };
 
 export default function MarkdownEditor({
@@ -17,7 +18,8 @@ export default function MarkdownEditor({
     setMarkdown,
     isAISetModelOpen,
     setIsAISetModelOpen,
-    handleOptimize
+    handleOptimize,
+    isOptimizing
 }: MarkdownEditorProps) {
 
     return (
@@ -40,6 +42,7 @@ export default function MarkdownEditor({
                         setIsAISetModelOpen={setIsAISetModelOpen}
                         isAISetModelOpen={isAISetModelOpen}
                         handleOptimize={handleOptimize}
+                        isOptimizing={isOptimizing}
                     />
                 
                     <div className="input-wrapper flex-1 overflow-hidden">
