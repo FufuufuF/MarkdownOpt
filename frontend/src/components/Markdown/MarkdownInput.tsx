@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
+
 export interface MarkdownInputProps {
     markdown: string;
     setMarkdown: (markdown: string) => void;
@@ -8,6 +11,17 @@ export default function MarkdownInput({
     markdown,
     setMarkdown
 }: MarkdownInputProps) {
+
+    const [localMarkdown, setLocalMarkdown] = useState<string>(markdown);
+    const debounceMarkdown = useDebounce(localMarkdown, 300);
+
+    useEffect(() => {
+        setMarkdown(debounceMarkdown);
+    }, [debounceMarkdown, setMarkdown]);
+
+    useEffect(() => {
+        setLocalMarkdown(markdown);
+    }, [markdown]);
 
     return (
         <div
@@ -31,8 +45,8 @@ export default function MarkdownInput({
                     overflow-y-auto
                 "
                 placeholder="输入 Markdown 内容..."
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
+                value={localMarkdown}
+                onChange={(e) => setLocalMarkdown(e.target.value)}
             ></textarea>
         </div>
     );
