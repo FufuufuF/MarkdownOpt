@@ -19,3 +19,15 @@ export interface AIModelConfig {
     baseUrl?: string;
     prompt?: string;
 }
+
+export function converModelInfoToAIModelConfig (modelInfo: ModelInfo): AIModelConfig {
+    return {
+        modelName: modelInfo.modelName,
+        provider: modelInfo.provider,
+        apiKey: modelInfo.apiKey,
+        maxTokens: modelInfo.maxTokens,
+        temperature: modelInfo.temperature,
+        baseUrl: modelInfo.baseUrl,
+        prompt: modelInfo.prompt
+    };
+}

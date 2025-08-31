@@ -1,4 +1,4 @@
-import { ModelInfo } from "../../models/AIModelConfig";
+import { ModelInfo } from "../../models/AIModels";
 import { v4 as uuidv4 } from "uuid";
 import { eventEmitter, AIModelEventTypes } from "../../utils/EventEmitter";
 
@@ -36,6 +36,7 @@ export class AISetModelVM {
 
                 // 设置当前应用的模型ID
                 if (savedCurrentApplicationModelId) {
+                    console.log("[vm从localStorage拉取当前应用模型ID]");
                     this.currentAppliedModelId = savedCurrentApplicationModelId;
                 }
             }

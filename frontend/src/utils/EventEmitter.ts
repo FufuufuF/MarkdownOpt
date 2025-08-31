@@ -1,15 +1,20 @@
-export class AIModelEventTypes {
-    static MODEL_CREATED = "model_created";
-    static MODEL_SELECTED = "model_selected";
-    static MODEL_DELETED = "model_deleted";
-    static MODEL_UPDATED = "model_updated";
-    static MODEL_APPLIED = "model_applied";
+export enum AIModelEventTypes {
+    MODEL_CREATED = "model_created",
+    MODEL_SELECTED = "model_selected",
+    MODEL_DELETED = "model_deleted",
+    MODEL_UPDATED = "model_updated",
+    MODEL_APPLIED = "model_applied",
 }
 
-export class EditorEventTypes {
-    static STYLE_UPDATE = "style_update";
-    static MARKDOWN_UPDATE = "markdown_update";
-    static AI_SET_MODEL_SHOW_UPDATE = "ai_set_model_show_update";
+export enum EditorEventTypes {
+    STYLE_UPDATE = "style_update",
+    MARKDOWN_UPDATE = "markdown_update",
+    AI_SET_MODEL_SHOW_UPDATE = "ai_set_model_show_update",
+
+    MARKDOWN_STREAM_UPDATE = "markdown_stream_update",
+    MARKDOWN_STREAM_START = "markdown_stream_start",
+    MARKDOWN_STREAM_END = "markdown_stream_end",
+    MARKDOWN_STREAM_ERROR = "markdown_stream_error"
 }
 
 export type EventListener<T> = (data: T) => void;

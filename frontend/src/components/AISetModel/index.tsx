@@ -3,7 +3,7 @@ import { ModelForm } from "./ModelForm";
 import { ModelList } from "./ModelList";
 import { ModelPreviewItemProps } from "./ModelPreviewItem";
 import { vm } from "./vm";
-import { ModelInfo } from "../../models/AIModelConfig";
+import { ModelInfo } from "../../models/AIModels";
 import { useEventListener } from "../../hooks/useEventListener";
 import { AIModelEventTypes } from "../../utils/EventEmitter";
 

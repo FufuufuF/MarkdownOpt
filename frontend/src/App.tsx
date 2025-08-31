@@ -5,12 +5,14 @@ import { appVM } from "./services/AppVM";
 import { useEventListener } from "./hooks/useEventListener";
 import { AIModelEventTypes, EditorEventTypes } from "./utils/EventEmitter";
 import { vm } from "./components/AISetModel/vm";
+import { converModelInfoToAIModelConfig } from "./models/AIModels";
 
 function App() {
 
     const [style, setStyle] = useState<string>(appVM.getStyle());
     const [markdown, setMarkdown] = useState<string>(appVM.getMarkdown());
     const [isAISetModelOpen, setIsAISetModelOpen] = useState<boolean>(appVM.getIsAISetModelShow());
+    const [isOptimizing, setIsOptimizing] = useState<boolean>(false);
 
     useEventListener(EditorEventTypes.STYLE_UPDATE, (style: string) => {
         setStyle(style);
@@ -27,15 +29,7 @@ function App() {
     useEventListener(AIModelEventTypes.MODEL_APPLIED, (id: string) => {
         const model = vm.getModel(id);
         if (model) {
-            const aiModelConfig = {
-                modelName: model.modelName,
-                provider: model.provider,
-                apiKey: model.apiKey,
-                maxTokens: model.maxTokens,
-                temperature: model.temperature,
-                baseUrl: model.baseUrl,
-                prompt: model.prompt
-            };
+            const aiModelConfig = converModelInfoToAIModelConfig(model);
 
             appVM.setCurrentAppliedModel(aiModelConfig);
         } else {
@@ -43,17 +37,27 @@ function App() {
         }
     });
 
+    // 监听流式更新事件
+    useEventListener(EditorEventTypes.MARKDOWN_STREAM_START, () => {
+        setIsOptimizing(true);
+    });
+
+    useEventListener(EditorEventTypes.MARKDOWN_STREAM_UPDATE, (content: string) => {
+        setMarkdown(content);
+    })
+
+    useEventListener(EditorEventTypes.MARKDOWN_STREAM_END, () => {
+        setIsOptimizing(false);
+    });
+
+    useEventListener(EditorEventTypes.MARKDOWN_STREAM_ERROR, (error: Error) => {
+        setIsOptimizing(false);
+        console.error("流式更新错误: ", error);
+    });
+
     const handleOptimize = useCallback(async () => {
-        if (!markdown.trim() || !style) {
-            console.log("请输入内容");
-            return;
-        }
-        try {
-            console.log("优化中...");
-        } catch (error) {
-            console.error("优化失败: ", error);
-        }
-    }, [markdown, style]);
+        await appVM.optimizeMarkdown();
+    }, []);
 
     const handleStyleChange = (style: string) => {
         appVM.setStyle(style);
@@ -78,9 +82,9 @@ function App() {
                 handleOptimize={handleOptimize}
             />
             {
-                isAISetModelOpen ? 
-                <div 
-                    className="
+                isAISetModelOpen ?
+                    <div
+                        className="
                         ai-set-model-wrapper
                         fixed
                         flex
@@ -92,11 +96,11 @@ function App() {
                         items-center
                         z-50
                     "
-                >
-                    <AISetModel onClickClose={() => setIsAISetModelOpen(false)} />
-                </div>
-                :
-                null
+                    >
+                        <AISetModel onClickClose={() => setIsAISetModelOpen(false)} />
+                    </div>
+                    :
+                    null
             }
         </>
     )

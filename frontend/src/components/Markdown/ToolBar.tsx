@@ -49,9 +49,9 @@ export default function ToolBar({
                         
                     ">
                     <option value="" disabled selected>选择写作风格</option>
-                    <option value="">小红书体</option>
-                    <option value="">知乎体</option>
-                    <option value="">微信公众号体</option>
+                    <option value="小红书体">小红书体</option>
+                    <option value="知乎体">知乎体</option>
+                    <option value="微信公众号体">微信公众号体</option>
                 </select>
 
                 <button

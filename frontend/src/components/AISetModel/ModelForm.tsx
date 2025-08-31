@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ModelInfo } from "../../models/AIModelConfig";
+import { ModelInfo } from "../../models/AIModels";
 
 export interface ModelFormProps {
     id: string;
