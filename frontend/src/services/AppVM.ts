@@ -1,14 +1,17 @@
+import { AIModelConfig } from "../models/AIModelConfig";
 import { EditorEventTypes, eventEmitter } from "../utils/EventEmitter";
 
 export class AppVM{
     private style: string;
     private markdown: string;
     private isAISetModelShow: boolean;
+    private currentAppliedModel: AIModelConfig | null;
 
     constructor() {
         this.style = "";
         this.markdown = "";
         this.isAISetModelShow = false;
+        this.currentAppliedModel = null;
     }
 
     getStyle() {
@@ -36,6 +39,12 @@ export class AppVM{
     setIsAISetModelShow(isShow: boolean) {
         this.isAISetModelShow = isShow;
         eventEmitter.emit(EditorEventTypes.AI_SET_MODEL_SHOW_UPDATE, isShow);
+    }
+
+    setCurrentAppliedModel(model: AIModelConfig | null) {
+        this.currentAppliedModel = model;
+
+        console.log("[appVM] 当前应用的模型: ", model);
     }
 }
 

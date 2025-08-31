@@ -3,7 +3,8 @@ import { AISetModel } from "./components/AISetModel";
 import { useCallback, useState } from "react";
 import { appVM } from "./services/AppVM";
 import { useEventListener } from "./hooks/useEventListener";
-import { EditorEventTypes } from "./utils/EventEmitter";
+import { AIModelEventTypes, EditorEventTypes } from "./utils/EventEmitter";
+import { vm } from "./components/AISetModel/vm";
 
 function App() {
 
@@ -21,6 +22,25 @@ function App() {
 
     useEventListener(EditorEventTypes.AI_SET_MODEL_SHOW_UPDATE, (isShow: boolean) => {
         setIsAISetModelOpen(isShow);
+    });
+
+    useEventListener(AIModelEventTypes.MODEL_APPLIED, (id: string) => {
+        const model = vm.getModel(id);
+        if (model) {
+            const aiModelConfig = {
+                modelName: model.modelName,
+                provider: model.provider,
+                apiKey: model.apiKey,
+                maxTokens: model.maxTokens,
+                temperature: model.temperature,
+                baseUrl: model.baseUrl,
+                prompt: model.prompt
+            };
+
+            appVM.setCurrentAppliedModel(aiModelConfig);
+        } else {
+            console.error("[在App中未找到正在应用的模型]");
+        }
     });
 
     const handleOptimize = useCallback(async () => {

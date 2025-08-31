@@ -122,6 +122,8 @@ export class AISetModelVM {
 
     setCurrentAppliedModel = (id: string) => {
         this.currentAppliedModelId = id;
+        // 添加持久化逻辑
+        localStorage.setItem("current-application-model-id", id);
         console.log("[在vm中: 发布模型应用更新事件]", id);
         eventEmitter.emit(AIModelEventTypes.MODEL_APPLIED, id);
     }
