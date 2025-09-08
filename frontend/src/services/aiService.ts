@@ -1,7 +1,7 @@
 import { OptimizeRequest } from "../models/OptimizeModels";
+import { API_CONFIG } from "./api";
 
 export class AIService {
-
     static async optimizeWithStreamMock(
         request: OptimizeRequest,
         onChunk: (chunk: string) => void,
@@ -49,5 +49,29 @@ aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
         } catch (error) {
             onError(error);
         }
+    }
+
+    static async optimizeBatch(
+        request: OptimizeRequest,
+        onChunk: (chunk: string) => void,
+        onComplete: () => void,
+        onError: (error: Error) => void
+    ): Promise<void> {
+        const url = API_CONFIG.BASE_URL + API_CONFIG.ENDPOINTS.OPTIMIZE.BATCH;
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            onError(new Error(`HTTP error! status: ${response.status}`));
+            return;
+        }
+
+        const text = await response.text();
+        onChunk(text);
+        onComplete();
     }
 }

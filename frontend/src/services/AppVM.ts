@@ -122,7 +122,7 @@ export class AppVM{
 
             this.setMarkdown("");
 
-            await AIService.optimizeWithStreamMock(
+            await AIService.optimizeBatch(
                 request,
                 (chunk: string) => {
                     this.appendToMarkdown(chunk);
