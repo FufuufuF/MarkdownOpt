@@ -1,5 +1,5 @@
-import { OptimizeRequest } from "../models/OptimizeModels";
-import { API_CONFIG } from "./api";
+import { LLMResponse, OptimizeRequest } from "../models/OptimizeModels";
+import { API_CONFIG, apiRequest } from "./api";
 
 export class AIService {
     static async optimizeWithStreamMock(
@@ -73,5 +73,22 @@ aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
         const text = await response.text();
         onChunk(text);
         onComplete();
+    }
+
+    static async testHealth(): Promise<boolean> {
+        const endpoint = API_CONFIG.ENDPOINTS.HEALTH;
+        const method = API_CONFIG.METHODS.POST;
+        const body = JSON.stringify({ test: "ping" });
+
+        try {
+            const response = await apiRequest<LLMResponse>(endpoint, {
+                method,
+                body,
+            });
+            return response.content != null;
+        } catch (error) {
+            console.error("Health check failed:", error);
+            return false;
+        }
     }
 }

@@ -6,6 +6,11 @@ export interface OptimizeRequest {
     aiModelConfig: AIModelConfig;
 }
 
+export interface LLMResponse {
+    content: string;
+    useTokens: number;
+}
+
 export interface StreamChunk {
     content: string;
     done: boolean;
