@@ -30,9 +30,3 @@ class APIRoutes:
     
     class Health:
         PREFIX = "/health"
-
-# 完整路径常量（用于文档或测试）
-class FullAPIRoutes:
-    OPTIMIZE_BATCH = f"{APIRoutes.V1_PREFIX}{APIRoutes.Optimize.PREFIX}{APIRoutes.Optimize.BATCH}"
-    OPTIMIZE_STREAM = f"{APIRoutes.V1_PREFIX}{APIRoutes.Optimize.PREFIX}{APIRoutes.Optimize.STREAM}"
-    HEALTH = f"{APIRoutes.V1_PREFIX}{APIRoutes.Health.PREFIX}"

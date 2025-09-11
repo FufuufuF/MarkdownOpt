@@ -1,5 +1,5 @@
 from app.api.v1.router import api_router
-from app.core.config import settings, APIRoutes
+from app.config.settings import settings, APIRoutes
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
