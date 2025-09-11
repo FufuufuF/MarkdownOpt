@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ModelInfo } from "../../models/AIModels";
+import { useThrottleCallback } from "../../hooks/useThrottle";
 
 export interface ModelFormProps {
     id: string;
@@ -84,6 +85,9 @@ export function ModelForm({
             timestamp: Date.now(),
         })
     }
+
+    const handleTestModel = useThrottleCallback(onTestModel, 2000);
+
     const formItemWrapperClassName: string = `
         form-item-wrapper
         m-4
@@ -269,15 +273,11 @@ export function ModelForm({
                     type="button"
                     className={`
                                 ${buttonClassName} 
-                                text-[#e0e0e0] 
-                                bg-[#212e3c] 
-                                hover:bg-[#111f2c]
-                                ${isApplied ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                                text-white
+                                bg-[#357faf] 
+                                hover:bg-[#2a6489]
                             `}
-                    onClick={() => {
-                        console.log("[在ModelForm中: 模型测试]");
-                        onTestModel(id);
-                    }}
+                    onClick={() => handleTestModel(id)}
                 >
                     测试
                 </button>
