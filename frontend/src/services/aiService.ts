@@ -1,3 +1,4 @@
+import { AIModelConfig } from "../models/AIModels";
 import { LLMResponse, OptimizeRequest } from "../models/OptimizeModels";
 import { API_CONFIG, apiRequest } from "./api";
 
@@ -75,17 +76,19 @@ aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
         onComplete();
     }
 
-    static async testHealth(): Promise<boolean> {
+    static async testHealth(aiModelConfig: AIModelConfig): Promise<boolean> {
         const endpoint = API_CONFIG.ENDPOINTS.HEALTH;
         const method = API_CONFIG.METHODS.POST;
-        const body = JSON.stringify({ test: "ping" });
+
+        const body = JSON.stringify(aiModelConfig);
 
         try {
             const response = await apiRequest<LLMResponse>(endpoint, {
                 method,
-                body,
+                body
             });
-            return response.content != null;
+            console.log(response)
+            return response.content === "ok";
         } catch (error) {
             console.error("Health check failed:", error);
             return false;

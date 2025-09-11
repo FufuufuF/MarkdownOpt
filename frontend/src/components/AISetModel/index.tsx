@@ -114,6 +114,13 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
         vm.setCurrentAppliedModel(id);
     };
 
+    const onTestModel = (id: string) => {
+        console.log("[在AISetModel中: 模型测试]");
+        const model = modelList.find(m => m.id === id);
+        if (!model) return;
+        vm.testModel(model);
+    }
+
     // 将模型列表处理成预览数据
     const modelPreviewItems: ModelPreviewItemProps[] = (
         modelList ?
@@ -221,6 +228,7 @@ export function AISetModel({ onClickClose }: AISetModelProps) {
                         onDeleteModel={onDeleteModel}
                         onCancelEdit={onCancelEdit}
                         onApplyModel={onApplyModel}
+                        onTestModel={onTestModel}
                     />
                 </div>
 

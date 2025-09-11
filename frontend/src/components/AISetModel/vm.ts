@@ -1,6 +1,7 @@
-import { ModelInfo } from "../../models/AIModels";
+import { converModelInfoToAIModelConfig, ModelInfo } from "../../models/AIModels";
 import { v4 as uuidv4 } from "uuid";
 import { eventEmitter, AIModelEventTypes } from "../../utils/EventEmitter";
+import { AIService } from "../../services/AIService";
 
 export class AISetModelVM {
     private models = new Map<string, ModelInfo>();
@@ -140,6 +141,12 @@ export class AISetModelVM {
         );
         return modelArray;
     };
+
+    testModel = async (model: ModelInfo) => {
+        const modelConfig = converModelInfoToAIModelConfig(model);
+        const isHealth = await AIService.testHealth(modelConfig);
+        console.log("[testModel]: ", isHealth);
+    }
 }
 
 export const vm = new AISetModelVM();

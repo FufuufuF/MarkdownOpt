@@ -15,7 +15,8 @@ export interface ModelFormProps {
     onSaveModel: (model: ModelInfo) => void;
     onDeleteModel: (id: string) => void;
     onCancelEdit: (id: string) => void;
-    onApplyModel?: (id: string) => void;
+    onApplyModel: (id: string) => void;
+    onTestModel: (id: string) => void;
 }
 
 export function ModelForm({
@@ -31,7 +32,8 @@ export function ModelForm({
     onSaveModel,
     onDeleteModel,
     onCancelEdit,
-    onApplyModel
+    onApplyModel,
+    onTestModel,
 }: ModelFormProps) {
 
     const [nowModelName, setModelName] = useState<string>(modelName);
@@ -262,6 +264,22 @@ export function ModelForm({
                     }}
                 >
                     应用
+                </button>
+                <button
+                    type="button"
+                    className={`
+                                ${buttonClassName} 
+                                text-[#e0e0e0] 
+                                bg-[#212e3c] 
+                                hover:bg-[#111f2c]
+                                ${isApplied ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                            `}
+                    onClick={() => {
+                        console.log("[在ModelForm中: 模型测试]");
+                        onTestModel(id);
+                    }}
+                >
+                    测试
                 </button>
             </div>
         </div>

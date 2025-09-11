@@ -8,7 +8,7 @@ export const API_CONFIG = {
             BATCH: "/api/v1/optimize/batch",
             STREAM: "/api/v1/optimize/stream",
         },
-        HEALTH: "/api/v1/health",
+        HEALTH: "/api/v1/health/",
     },
 
     HEADERS: {
