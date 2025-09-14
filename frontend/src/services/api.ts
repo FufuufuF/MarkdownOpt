@@ -1,7 +1,6 @@
-
 export const API_CONFIG = {
     BASE_URL: "http://localhost:8000",
-    TIMEOUT: 10000,
+    TIMEOUT: 100000000000,
 
     ENDPOINTS: {
         OPTIMIZE: {
@@ -62,8 +61,10 @@ export async function apiRequest<T>(
 
     const controller = new AbortController();
     const timer = setTimeout(() => {
-        controller.abort();
+        // controller.abort();
     }, timeout);
+
+    console.log("[api]: 发起请求");
 
     try {
         const response = await fetch(url, {
@@ -76,17 +77,30 @@ export async function apiRequest<T>(
         clearTimeout(timer);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            // 提供更详细的错误信息
+            throw new Error(`API请求失败: ${response.status} ${response.statusText} - ${endpoint}`);
         }
 
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.includes("application/json")) {
             return (await response.json()) as T;
         } else {
-            throw new Error("Unsupported response type");
+            throw new Error(`不支持的响应类型: ${contentType} - ${endpoint}`);
         }
     } catch (error) {
         clearTimeout(timer);
+        
+        // 如果是 AbortError，提供更友好的错误信息
+        if (error instanceof Error && error.name === 'AbortError') {
+            throw new Error(`请求超时 (${timeout}ms) - ${endpoint}`);
+        }
+        
+        // 如果是网络错误，提供更好的描述
+        if (error instanceof TypeError && error.message.includes('fetch')) {
+            throw new Error(`网络连接失败 - ${endpoint}`);
+        }
+        
+        // 重新抛出原始错误
         throw error;
     }
 }

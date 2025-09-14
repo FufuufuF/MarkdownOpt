@@ -117,25 +117,16 @@ export class AppVM{
             const request: OptimizeRequest = {
                 markdown: markdownSnapshot,
                 style: this.style,
-                aiModelConfig: this.currentAppliedModel
+                ...this.currentAppliedModel
             }
 
             this.setMarkdown("");
 
-            await AIService.optimizeBatch(
-                request,
-                (chunk: string) => {
-                    this.appendToMarkdown(chunk);
-                },
-                () => {
-                    this.endOptimizing();
-                    console.log("已完成");
-                },
-                (error: Error) => {
-                    this.errorOptimizing(error.message);
-                    console.log("优化失败", error);
-                }
-            );
+            const llmReponse = await AIService.optimizeBatch(request);
+
+            console.log("[AppVM]: 接收到LLM回复");
+
+            this.setMarkdown(llmReponse.content);
         } catch (error) {
             this.errorOptimizing(error instanceof Error ? error.message : "未知错误");
             console.log("优化失败", error);

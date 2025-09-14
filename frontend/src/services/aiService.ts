@@ -24,7 +24,6 @@ export class AIService {
 
 markdown: ${request.markdown}
 style: ${request.style}
-aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
 
 通过AI优化，这段内容变得更加生动有趣，符合现代读者的阅读习惯。
 
@@ -40,7 +39,7 @@ aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
                     const chunk = words.slice(idx, idx + chunkSize).join("");
                     onChunk(chunk);
                     idx += chunkSize;
-                    setTimeout(sendNextChunk, 100); // Simulate streaming delay
+                    setTimeout(sendNextChunk, 100); 
                 } else {
                     onComplete();
                 }
@@ -52,28 +51,26 @@ aiModelConfig: ${JSON.stringify(request.aiModelConfig)}
         }
     }
 
-    static async optimizeBatch(
-        request: OptimizeRequest,
-        onChunk: (chunk: string) => void,
-        onComplete: () => void,
-        onError: (error: Error) => void
-    ): Promise<void> {
-        const url = API_CONFIG.BASE_URL + API_CONFIG.ENDPOINTS.OPTIMIZE.BATCH;
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+    static async optimizeBatch(optRequest: OptimizeRequest): Promise<LLMResponse> {
+        const endpoint = API_CONFIG.ENDPOINTS.OPTIMIZE.BATCH;
+        const method = API_CONFIG.METHODS.POST;
 
-        if (!response.ok) {
-            onError(new Error(`HTTP error! status: ${response.status}`));
-            return;
+        const body = JSON.stringify(optRequest);
+
+        try {
+            const response: LLMResponse = await apiRequest<LLMResponse>(endpoint, {
+                method,
+                body,
+            });
+            console.log("[AIService]: 收到llm回复");
+            return response;
+        } catch (error) {
+            console.error("Optimize Batch failed: ", error);
+            return {
+                content: "falied",
+                useTokens: 0
+            } as LLMResponse;
         }
-
-        const text = await response.text();
-        onChunk(text);
-        onComplete();
     }
 
     static async testHealth(aiModelConfig: AIModelConfig): Promise<boolean> {
