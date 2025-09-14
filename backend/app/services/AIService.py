@@ -1,6 +1,7 @@
 from ..models.AIModelConfig import AIModelConfig
 from ..core.LLMFactory import LLMFactory
-from ..core.LLMWrapper import LLMWrapper
+from ..models.AIModelConfig import AIModelPrompt
+from ..models.OptModels import OptResponse
 
 class AIService:
     @staticmethod
@@ -8,11 +9,20 @@ class AIService:
         try:
             llmWrapper = LLMFactory.createLLM(request)
             
-            if llmWrapper != None:
-                isHealth = await llmWrapper.testHealth()
-            else:
-                raise TypeError("大模型必须不为None")
+            isHealth = await llmWrapper.testHealth()
             
             return isHealth
+        except Exception as e:
+            raise e
+        
+    @staticmethod
+    async def optimizeBatch(aiModelConfig: AIModelConfig, aiModelPrompt: AIModelPrompt):
+        try:
+            llmWrapper = LLMFactory.createLLM(aiModelConfig)
+            
+            llmResponse: OptResponse = await llmWrapper.call(aiModelPrompt)
+            
+            return llmResponse
+            
         except Exception as e:
             raise e
