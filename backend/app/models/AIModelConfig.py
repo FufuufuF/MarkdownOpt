@@ -24,7 +24,7 @@ def getAIModelConfig(request: OptRequest):
         apiKey=SecretStr(request.apiKey),
         temperature=0.7 if request.temperature == None else request.temperature,
         maxTokens=1024 if request.maxTokens == None else request.maxTokens,
-        baseUrl=request.baseURL,
+        baseUrl=request.baseUrl,
         prompt=request.prompt
     )
     

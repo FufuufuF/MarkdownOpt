@@ -12,7 +12,7 @@ class OptRequest(BaseModel):
     markdown: str
     temperature: Optional[float] = 0.7
     maxTokens: Optional[int] = 1024
-    baseURL: Optional[str]
+    baseUrl: Optional[str]
     
     prompt: Optional[str] = ""
     style: str

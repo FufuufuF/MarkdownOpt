@@ -17,5 +17,7 @@ class LLMFactory:
             )
             
             return LLMWrapper(llm)
+        else:
+            raise Exception("大模型为None")
         
         

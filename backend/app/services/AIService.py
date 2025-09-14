@@ -16,7 +16,7 @@ class AIService:
             raise e
         
     @staticmethod
-    async def optimizeBatch(aiModelConfig: AIModelConfig, aiModelPrompt: AIModelPrompt):
+    async def optimizeBatch(aiModelConfig: AIModelConfig, aiModelPrompt: AIModelPrompt):        
         try:
             llmWrapper = LLMFactory.createLLM(aiModelConfig)
             
